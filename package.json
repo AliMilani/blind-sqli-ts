@@ -1,0 +1,15 @@
+{
+  "name": "blind-sqli-ts",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@sindresorhus/tsconfig": "^7.0.0",
+    "@types/node": "^22.13.11",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.2"
+  },
+  "dependencies": {
+    "nodemon": "^3.1.9"
+  }
+}
