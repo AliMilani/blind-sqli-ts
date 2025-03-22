@@ -1,37 +1,29 @@
-const asciiTable: string[] = Array.apply(null, Array(256)).map((_, index) => {
-  return String.fromCharCode(index);
-});
-console.log(asciiTable.length);
+const hiddenWord = "1ali82!31~5A@1awakdjawpjpda!91201u4-adkwÿjwjp52*(d";
 
-const hiddenWord = "ali82!315152*(d";
+let httpReqCount = 0; //
+
+const MIN_PRINTABLE_ASCII = 32;
 
 function findCharacterAt(index: number): string {
-  let lowerBound = 0;
-  let upperBound = asciiTable.length - 1;
+  let lowerBound = MIN_PRINTABLE_ASCII;
+  let upperBound = 255;
 
-  while (upperBound >= lowerBound) {
-    console.log("checking ", upperBound, lowerBound);
-    const targetChar = hiddenWord[index];
-    if (targetChar === undefined) throw new Error("Invalid index");
-    const targetCharCode = targetChar.charCodeAt(0);
+  while (lowerBound < upperBound) {
+    const mid = Math.floor((lowerBound + upperBound) / 2);
+    if (hiddenWord[index] == undefined) throw new Error("Index out of bounds");
+    const targetCharCode = hiddenWord[index].charCodeAt(0);
 
-    if (upperBound == targetCharCode) return String.fromCharCode(upperBound);
-    if (lowerBound == targetCharCode) return String.fromCharCode(lowerBound);
+    const isGreater = targetCharCode > mid;
+    httpReqCount++;
 
-    const mid: number = lowerBound + Math.floor((upperBound - lowerBound) / 2);
-
-    if (mid == targetCharCode) return String.fromCharCode(mid);
-
-    if (mid > targetCharCode) {
-      upperBound = mid - 1;
-    } else {
-      lowerBound = mid + 1;
-    }
+    if (isGreater) lowerBound = mid + 1;
+    else upperBound = mid;
   }
-  throw new Error("Character not found");
+
+  return String.fromCharCode(lowerBound);
 }
 
-const main = () => {
+(() => {
   const hiddenWordLength = hiddenWord.length;
   let discoveredWord = "";
 
@@ -40,8 +32,7 @@ const main = () => {
     discoveredWord = discoveredWord + character;
   });
 
-  if (discoveredWord == hiddenWord) console.log("Success:", discoveredWord);
+  if (discoveredWord == hiddenWord)
+    console.log("Success:", discoveredWord, { httpReqCount });
   else throw new Error("Failed to find the word");
-};
-
-main();
+})();
